@@ -1,10 +1,15 @@
 import discord
+import logging
+
+# configuro il logger
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger("damabot")
 
 client = discord.Client()
 
 @client.event
 async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
+    log.info('Login effettuato come {0.user}'.format(client))
 
 @client.event
 async def on_message(message):
