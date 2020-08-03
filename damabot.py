@@ -1,22 +1,23 @@
 import discord
+from discord.ext import commands
 import logging
+
 
 # configuro il logger
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("damabot")
 
-client = discord.Client()
+bot = commands.Bot(command_prefix='$', description='La dama della gilda si occupa di gestire i ruoli degli utenti')
 
-@client.event
+@bot.event
 async def on_ready():
-    log.info('Login effettuato come {0.user}'.format(client))
+    log.info('Login effettuato come {0.user}'.format(bot))
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+# comandi
+@bot.command()
+async def ping(ctx):
+    """Risponde pong! utile per testare se il bot e' online"""
+    await ctx.send('pong!')
+    pass
 
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
-
-client.run('NzM5NjYxNjUwOTUyNTg1Mjc3.Xydtlw.H6wzJOtzXu8elFVo-4SJ4jDvD-4')
+bot.run('NzM5NjYxNjUwOTUyNTg1Mjc3.Xydtlw.H6wzJOtzXu8elFVo-4SJ4jDvD-4')
