@@ -20,4 +20,17 @@ async def ping(ctx):
     await ctx.send('pong!')
     pass
 
+@bot.command()
+async def clear(ctx):
+    """Rimove tutti i messaggi dal canale testuale"""
+    async for message in ctx.channel.history():
+        await message.delete()
+    pass
+
+@bot.command()
+async def ruoli(ctx):
+    """Genera ed invia il messaggio di selezione ruolo"""
+    await ctx.message.delete()
+    pass
+
 bot.run('NzM5NjYxNjUwOTUyNTg1Mjc3.Xydtlw.H6wzJOtzXu8elFVo-4SJ4jDvD-4')
