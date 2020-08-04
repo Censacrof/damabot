@@ -89,7 +89,7 @@ async def ruoli(ctx):
                         emoji = discord.PartialEmoji(id=fullEmoji.id, name=fullEmoji.name, animated=fullEmoji.animated)
 
             if emoji is None:
-                log.warn("Non e' stata trovata un emoji corrispondente a: " + role['emoji'])
+                log.warning("Non e' stata trovata un emoji corrispondente a: " + role['emoji'])
                 continue
 
             await msg.add_reaction(emoji)
