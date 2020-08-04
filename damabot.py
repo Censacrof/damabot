@@ -69,7 +69,14 @@ async def ruoli(ctx):
         embed = discord.Embed(title=group['title'], description=group['description'], color=0x08457E)
         
         for role in group['roles']:
-            embed.add_field(name=role['title'], value=role['description'], inline=False)
+            reg = r'[^\s]'
+            if 'title' in role and role['title'] is not None\
+            and re.search(reg, role['title']) is not None\
+            and 'description' in role and role['description'] is not None\
+            and re.search(reg, role['description']) is not None: 
+                title = role['emoji'] + ' ' + role['title']
+                desc = role['description']
+                embed.add_field(name=title, value=desc, inline=True)
         msg = await ctx.send(embed=embed)
         
         reactionRoleAssociation = []
@@ -80,7 +87,7 @@ async def ruoli(ctx):
                 emoji = discord.PartialEmoji(name=role['emoji'])
             else:
                 # emoji custom
-                match = re.match('^:[^:]+:([0-9]+)$', role['emoji'])
+                match = re.match('^\\<:[^:]+:([0-9]+)\\>$', role['emoji'])
 
                 if match is not None:
                     # se la regex ha prodotto un match uso l' id dell'emoji per trovarla

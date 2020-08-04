@@ -6,21 +6,21 @@
             "roles": [
                 {
                     "title": "Per Generation Ultimate / XX",
-                    "description": "Clicca qua sotto sullo stemma della gilda :mhxx:617703032670519297",
+                    "description": "Clicca qua sotto sullo stemma della gilda",
                     "roleID": 617664685852065792,
-                    "emoji": ":mhxx:617703032670519297"
+                    "emoji": "<:mhxx:617703032670519297>"
                 },
                 {
                     "title": "Per 4 Ultimate",
-                    "description": "Clicca qua sotto sul logo :mh4u:617702430548951053",
+                    "description": "Clicca qua sotto sul logo",
                     "roleID": 617665548934709248,
-                    "emoji": ":mh4u:617702430548951053"
+                    "emoji": "<:mh4u:617702430548951053>"
                 },
                 {
                     "title": "Per tutti gli altri titoli",
-                    "description": "Clicca qua sotto sull'emblema :monhunt:61770298863439054",
+                    "description": "Clicca qua sotto sull'emblema",
                     "roleID": 617664732509503488,
-                    "emoji": ":monhunt:61770298863439054"
+                    "emoji": "<:monhunt:617702988634390547>"
                 }
             ]
         },
@@ -30,21 +30,21 @@
             "roles": [
                 {
                     "title": "Per PlayStation4",
-                    "description": "Clicca qua sotto sul simbolo :ps:404716007140229120",
+                    "description": "Clicca qua sotto sul simbolo",
                     "roleID": 617655550036934656,
-                    "emoji": ":ps:404716007140229120"
+                    "emoji": "<:ps:404716007140229120>"
                 },
                 {
                     "title": "Per XBoxOne",
-                    "description": "Clicca qua sotto sul simbolo :xb:380668938067116032",
+                    "description": "Clicca qua sotto sul simbolo",
                     "roleID": 617655886495875093,
-                    "emoji": ":xb:380668938067116032"
+                    "emoji": "<:xb:380668938067116032>"
                 },
                 {
                     "title": "Per PC",
-                    "description": "Clicca qua sotto sul simbolo :mhpc:404717227980488714",
+                    "description": "Clicca qua sotto sul simbolo",
                     "roleID": 617655930032488488,
-                    "emoji": ":mhpc:404717227980488714"
+                    "emoji": "<:mhpc:404717227980488714>"
                 }
             ]
         },
@@ -54,10 +54,8 @@
             "description": "Prendete qui il ruolo per seguire la Content Chat!",
             "roles": [
                 {
-                    "title": "",
-                    "description": "",
                     "roleID": 617665242977009680,
-                    "emoji": ":youtube:404776393910779914"
+                    "emoji": "<:youtube:404776393910779914>"
                 }
                
             ]
