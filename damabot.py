@@ -92,14 +92,24 @@ async def on_raw_reaction_add(payload):
     # se la reaction e' stata messa dal bot stesso la ignoro
     if payload.member.bot:
         return
-    
-    print(payload)
 
     if payload.message_id in whatchedMessages:        
         for assoc in whatchedMessages[payload.message_id]:
             if assoc['emoji'] == payload.emoji:
                 role = discord.utils.get(payload.member.guild.roles, id=assoc['roleID'])
                 await payload.member.add_roles(role)    
+    pass
+
+@bot.event
+async def on_raw_reaction_remove(payload):
+    guild = await bot.fetch_guild(payload.guild_id)
+    member = await guild.fetch_member(payload.user_id)
+
+    if payload.message_id in whatchedMessages:        
+        for assoc in whatchedMessages[payload.message_id]:
+            if assoc['emoji'] == payload.emoji:
+                role = discord.utils.get(guild.roles, id=assoc['roleID'])
+                await member.remove_roles(role)
     pass
 
 bot.run('NzM5NjYxNjUwOTUyNTg1Mjc3.Xydtlw.H6wzJOtzXu8elFVo-4SJ4jDvD-4')
