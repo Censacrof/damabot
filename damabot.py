@@ -4,6 +4,9 @@ import logging
 import json
 import emoji as EMOJI
 import re
+import os
+
+WATCHED_MESSAGES_FILE = 'watched_messages.json'
 
 
 # configuro il logger
@@ -12,8 +15,17 @@ log = logging.getLogger("damabot")
 
 bot = commands.Bot(command_prefix='$', description='La dama della gilda si occupa di gestire i ruoli degli utenti')
 
-# dizionario (key: message_id, val: associazioni ruolo reaction)
-whatchedMessages = {}
+# carico il dizionario dei messaggi da controllare
+watched_messages = {}
+if os.path.isfile(WATCHED_MESSAGES_FILE):
+    try:
+        with open(WATCHED_MESSAGES_FILE, 'r') as f:
+            watched_messages = json.load(f)
+            f.close()
+            log.info('Deserializzato watchedMessages')
+    except Exception as e:
+        log.warning('Impossibile deserializzare watchedMessages')
+
 
 @bot.event
 async def on_ready():
@@ -36,7 +48,7 @@ async def clear(ctx):
 @bot.command()
 async def ruoli(ctx):
     """Genera ed invia il messaggio di selezione ruolo"""
-    global whatchedMessages
+    global watched_messages
 
     # cancello in messaggio che contiene il comando
     await ctx.message.delete()
@@ -45,14 +57,14 @@ async def ruoli(ctx):
     roleDefinitions = None
     try:
         with open('roles.json', 'r') as roles_file:
-            roleDefinitions = json.load(roles_file)
+            roleDefinitions =  json.load(roles_file)
     except Exception as e:
         err = 'Errore: Impossibile fare il parsing dei ruoli\n' + ' - ' + str(e)
         log.error(err)
         await ctx.send(err)
         return
     
-    whatchedMessages = {}
+    watched_messages = {}
     for group in roleDefinitions['groups']:
         embed = discord.Embed(title=group['title'], description=group['description'], color=0x08457E)
         
@@ -72,7 +84,8 @@ async def ruoli(ctx):
 
                 if match is not None:
                     # se la regex ha prodotto un match uso l' id dell'emoji per trovarla
-                    emoji = bot.get_emoji(int(match.group(1)))
+                    fullEmoji = bot.get_emoji(int(match.group(1)))
+                    emoji = discord.PartialEmoji(id=fullEmoji.id, name=fullEmoji.name, animated=fullEmoji.animated)
 
             if emoji is None:
                 log.warn("Non e' stata trovata un emoji corrispondente a: " + role['emoji'])
@@ -80,11 +93,23 @@ async def ruoli(ctx):
 
             await msg.add_reaction(emoji)
             reactionRoleAssociation.append({ 
-                "emoji": emoji, 
-                "roleID":  role['roleID']
+                'emojiName': emoji.name,
+                'emojiID':  emoji.id,
+                'roleID':  role['roleID']
             })
+        watched_messages[str(msg.id)] = reactionRoleAssociation
 
-        whatchedMessages[msg.id] = reactionRoleAssociation
+    # serializzo watchedMessages
+    log.info('Serializzo watchedMessage')
+    try:
+        with open('watched_messages.json', 'w') as f:
+            json.dump(watched_messages, f, ensure_ascii=False)
+            f.close()
+    except Exception as e:
+        err = 'Errore: Impossibile serializzare watchedMessages\n' + ' - ' + str(e)
+        log.error(err)
+        await ctx.send(err)
+        return
     pass
 
 @bot.event
@@ -93,9 +118,10 @@ async def on_raw_reaction_add(payload):
     if payload.member.bot:
         return
 
-    if payload.message_id in whatchedMessages:        
-        for assoc in whatchedMessages[payload.message_id]:
-            if assoc['emoji'] == payload.emoji:
+    msgid = str(payload.message_id)
+    if msgid in watched_messages:        
+        for assoc in watched_messages[msgid]:
+            if assoc['emojiName'] == payload.emoji.name and assoc['emojiID'] == payload.emoji.id:
                 role = discord.utils.get(payload.member.guild.roles, id=assoc['roleID'])
                 await payload.member.add_roles(role)    
     pass
@@ -105,9 +131,10 @@ async def on_raw_reaction_remove(payload):
     guild = await bot.fetch_guild(payload.guild_id)
     member = await guild.fetch_member(payload.user_id)
 
-    if payload.message_id in whatchedMessages:        
-        for assoc in whatchedMessages[payload.message_id]:
-            if assoc['emoji'] == payload.emoji:
+    msgid = str(payload.message_id)
+    if msgid in watched_messages:        
+        for assoc in watched_messages[msgid]:
+            if assoc['emojiName'] == payload.emoji.name and assoc['emojiID'] == payload.emoji.id:
                 role = discord.utils.get(guild.roles, id=assoc['roleID'])
                 await member.remove_roles(role)
     pass
