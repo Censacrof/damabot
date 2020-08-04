@@ -10,7 +10,14 @@ WATCHED_MESSAGES_FILE = 'watched_messages.json'
 
 
 # configuro il logger
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("damabot.log"),
+        logging.StreamHandler()
+    ]
+)
 log = logging.getLogger("damabot")
 
 bot = commands.Bot(command_prefix='$', description='La dama della gilda si occupa di gestire i ruoli degli utenti')
