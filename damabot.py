@@ -85,7 +85,8 @@ async def ruoli(ctx):
                 if match is not None:
                     # se la regex ha prodotto un match uso l' id dell'emoji per trovarla
                     fullEmoji = bot.get_emoji(int(match.group(1)))
-                    emoji = discord.PartialEmoji(id=fullEmoji.id, name=fullEmoji.name, animated=fullEmoji.animated)
+                    if fullEmoji is not None:
+                        emoji = discord.PartialEmoji(id=fullEmoji.id, name=fullEmoji.name, animated=fullEmoji.animated)
 
             if emoji is None:
                 log.warn("Non e' stata trovata un emoji corrispondente a: " + role['emoji'])

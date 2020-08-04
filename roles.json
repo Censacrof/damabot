@@ -6,40 +6,60 @@
             "roles": [
                 {
                     "title": "Per Generation Ultimate / XX",
-                    "description": "Clicca qua sotto sullo stemma della gilda :mh:740002569291825234",
-                    "roleID": 739983184975888392,
-                    "emoji": ":mh:740002569291825234"
+                    "description": "Clicca qua sotto sullo stemma della gilda :mhxx:617703032670519297",
+                    "roleID": 617664685852065792,
+                    "emoji": ":mhxx:617703032670519297"
                 },
                 {
                     "title": "Per 4 Ultimate",
-                    "description": "Clicca qua sotto sul logo relativo",
-                    "roleID": 739983184975888391,
-                    "emoji": "👍"
+                    "description": "Clicca qua sotto sul logo :mh4u:617702430548951053",
+                    "roleID": 617665548934709248,
+                    "emoji": ":mh4u:617702430548951053"
                 },
                 {
                     "title": "Per tutti gli altri titoli",
-                    "description": "Clicca qua sotto sull'emblema :heart:",
-                    "roleID": 739983184975888391,
-                    "emoji": "❤️"
+                    "description": "Clicca qua sotto sull'emblema :monhunt:61770298863439054",
+                    "roleID": 617664732509503488,
+                    "emoji": ":monhunt:61770298863439054"
                 }
             ]
         },
         {
-            "title": "Nuove Generazioni",
-            "description": "Gasd kasd jklasd jads ",
+            "title": "Ruoli Monster Hunter World",
+            "description": "Prendete qui il ruolo di Monster Hunter World relativo alla console che utilizzate per giocarci!",
             "roles": [
                 {
-                    "title": "Fatal error:",
-                    "description": "404 bugo not found",
-                    "roleID": 739983184975888392,
-                    "emoji": ":mh:740002569291825234"
+                    "title": "Per PlayStation4",
+                    "description": "Clicca qua sotto sul simbolo :ps:404716007140229120",
+                    "roleID": 617655550036934656,
+                    "emoji": ":ps:404716007140229120"
                 },
                 {
-                    "title": "Deh",
-                    "description": "Adesso si che prima no",
-                    "roleID": 739983184975888391,
-                    "emoji": "👍"
+                    "title": "Per XBoxOne",
+                    "description": "Clicca qua sotto sul simbolo :xb:380668938067116032",
+                    "roleID": 617655886495875093,
+                    "emoji": ":xb:380668938067116032"
+                },
+                {
+                    "title": "Per PC",
+                    "description": "Clicca qua sotto sul simbolo :mhpc:404717227980488714",
+                    "roleID": 617655930032488488,
+                    "emoji": ":mhpc:404717227980488714"
                 }
+            ]
+        },
+
+        {
+            "title": "Ruolo Content Chat",
+            "description": "Prendete qui il ruolo per seguire la Content Chat!",
+            "roles": [
+                {
+                    "title": "",
+                    "description": "",
+                    "roleID": 617665242977009680,
+                    "emoji": ":youtube:404776393910779914"
+                }
+               
             ]
         }
     ]
