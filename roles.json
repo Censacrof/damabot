@@ -6,20 +6,20 @@
             "roles": [
                 {
                     "title": "Per Generation Ultimate / XX",
-                    "description": "Clicca qua sotto sullo stemma della gilda",
-                    "roleID": "739983184975888392",
+                    "description": "Clicca qua sotto sullo stemma della gilda :mh:740002569291825234",
+                    "roleID": 739983184975888392,
                     "emoji": ":mh:740002569291825234"
                 },
                 {
                     "title": "Per 4 Ultimate",
                     "description": "Clicca qua sotto sul logo relativo",
-                    "role": "739983184975888391",
+                    "roleID": 739983184975888391,
                     "emoji": "👍"
                 },
                 {
                     "title": "Per tutti gli altri titoli",
                     "description": "Clicca qua sotto sull'emblema :heart:",
-                    "role": "739983184975888391",
+                    "roleID": 739983184975888391,
                     "emoji": "❤️"
                 }
             ]
@@ -31,13 +31,13 @@
                 {
                     "title": "Fatal error:",
                     "description": "404 bugo not found",
-                    "roleID": "739983184975888392",
+                    "roleID": 739983184975888392,
                     "emoji": ":mh:740002569291825234"
                 },
                 {
                     "title": "Deh",
                     "description": "Adesso si che prima no",
-                    "role": "739983184975888391",
+                    "roleID": 739983184975888391,
                     "emoji": "👍"
                 }
             ]

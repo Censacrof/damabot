@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 import logging
 import json
+import emoji as EMOJI
+import re
 
 
 # configuro il logger
@@ -9,6 +11,9 @@ logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("damabot")
 
 bot = commands.Bot(command_prefix='$', description='La dama della gilda si occupa di gestire i ruoli degli utenti')
+
+# dizionario (key: message_id, val: associazioni ruolo reaction)
+whatchedMessages = {}
 
 @bot.event
 async def on_ready():
@@ -31,6 +36,9 @@ async def clear(ctx):
 @bot.command()
 async def ruoli(ctx):
     """Genera ed invia il messaggio di selezione ruolo"""
+    global whatchedMessages
+
+    # cancello in messaggio che contiene il comando
     await ctx.message.delete()
 
     # apro il file contenente le definizioni dei ruoli
@@ -39,20 +47,59 @@ async def ruoli(ctx):
         with open('roles.json', 'r') as roles_file:
             roleDefinitions = json.load(roles_file)
     except Exception as e:
-        msg = 'Errore: Impossibile fare il parsing dei ruoli\n' + ' - ' + str(e)
-        log.error(msg)
-        await ctx.send(msg)
+        err = 'Errore: Impossibile fare il parsing dei ruoli\n' + ' - ' + str(e)
+        log.error(err)
+        await ctx.send(err)
         return
     
+    whatchedMessages = {}
     for group in roleDefinitions['groups']:
         embed = discord.Embed(title=group['title'], description=group['description'], color=0x08457E)
         
         for role in group['roles']:
             embed.add_field(name=role['title'], value=role['description'], inline=False)
-        mhvmsg = await ctx.send(embed=embed)
+        msg = await ctx.send(embed=embed)
         
+        reactionRoleAssociation = []
         for role in group['roles']:
-            await mhvmsg.add_reaction(role['emoji'])
+            emoji = None
+            if role['emoji'] in EMOJI.UNICODE_EMOJI:
+                # emoji unicode
+                emoji = discord.PartialEmoji(name=role['emoji'])
+            else:
+                # emoji custom
+                match = re.match('^:[^:]+:([0-9]+)$', role['emoji'])
+
+                if match is not None:
+                    # se la regex ha prodotto un match uso l' id dell'emoji per trovarla
+                    emoji = bot.get_emoji(int(match.group(1)))
+
+            if emoji is None:
+                log.warn("Non e' stata trovata un emoji corrispondente a: " + role['emoji'])
+                continue
+
+            await msg.add_reaction(emoji)
+            reactionRoleAssociation.append({ 
+                "emoji": emoji, 
+                "roleID":  role['roleID']
+            })
+
+        whatchedMessages[msg.id] = reactionRoleAssociation
+    pass
+
+@bot.event
+async def on_raw_reaction_add(payload):
+    # se la reaction e' stata messa dal bot stesso la ignoro
+    if payload.member.bot:
+        return
+    
+    print(payload)
+
+    if payload.message_id in whatchedMessages:        
+        for assoc in whatchedMessages[payload.message_id]:
+            if assoc['emoji'] == payload.emoji:
+                role = discord.utils.get(payload.member.guild.roles, id=assoc['roleID'])
+                await payload.member.add_roles(role)    
     pass
 
 bot.run('NzM5NjYxNjUwOTUyNTg1Mjc3.Xydtlw.H6wzJOtzXu8elFVo-4SJ4jDvD-4')
