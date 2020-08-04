@@ -140,4 +140,4 @@ async def on_raw_reaction_remove(payload):
                 await member.remove_roles(role)
     pass
 
-bot.run('NzM5NjYxNjUwOTUyNTg1Mjc3.Xydtlw.H6wzJOtzXu8elFVo-4SJ4jDvD-4')
+bot.run('NDAzODU0MDgyMDIxNzg1NjAx.WmHEbA.09g1vYH_jZ8kRuINuR4PfTGNohY')
