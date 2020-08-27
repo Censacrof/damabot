@@ -59,6 +59,25 @@
                 }
                
             ]
+        },
+
+        {
+            "title": "Ruoli Zuccherino Cookies (Zucckies)",
+            "description": "Prendete qui il ruolo per il minigioco dei biscotti di Zuccherino giocabile in #zucckies_defend",
+            "roles": [
+                {
+                    "title": "Per Cookie Defender",
+                    "description": "I guardiani del barattolo",
+                    "roleID": 745216682619830283,
+                    "emoji": "🍪"
+                },
+                {
+                    "title": "Per Cookie Monster",
+                    "description": "I mangiatori seriali",
+                    "roleID": 745217828939890748,
+                    "emoji": "👾"
+                }   
+            ]
         }
     ]
 }
