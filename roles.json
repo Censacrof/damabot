@@ -1,82 +1,105 @@
 {
-    "groups": [
+    "channels": [
         {
-            "title": "Ruoli Monster Hunter",
-            "description": "Prendete qui il ruolo di Monster Hunter per le vecchie generazioni!",
-            "roles": [
+            "___comment": "PAGINA DI BENVENUTO",
+            "channelID": "760799531213389825",
+            "groups": [
                 {
-                    "title": "Per Generation Ultimate / XX",
-                    "description": "Clicca qua sotto sullo stemma della gilda",
-                    "roleID": 617664685852065792,
-                    "emoji": "<:mhxx:617703032670519297>"
-                },
-                {
-                    "title": "Per 4 Ultimate",
-                    "description": "Clicca qua sotto sul logo",
-                    "roleID": 617665548934709248,
-                    "emoji": "<:mh4u:617702430548951053>"
-                },
-                {
-                    "title": "Per tutti gli altri titoli",
-                    "description": "Clicca qua sotto sull'emblema",
-                    "roleID": 617664732509503488,
-                    "emoji": "<:monhunt:617702988634390547>"
+                    "title": "Benvenuti nel server ufficiale della community Italiana di Monster Hunter!!!",
+                    "description": "",
+                    "roles": [
+                        {
+                            "title": "Per partecipare alla nostra comunità...",
+                            "description": "...siete pregati di usare la reaction sotto questo messaggio, a dimostrazione che avete letto fin qui. Vi verrà assegnato un ruolo che vi permetterà di vedere le altre sezioni del server.",
+                            "roleID": 760789627157217300,
+                            "emoji": "✅"
+                        }
+                    ]
                 }
             ]
         },
         {
-            "title": "Ruoli Monster Hunter World",
-            "description": "Prendete qui il ruolo di Monster Hunter World relativo alla console che utilizzate per giocarci!",
-            "roles": [
+            "___comment": "PAGINA DI SELEZIONE RUOLI",
+            "channelID": "403855225443581963",
+            "groups": [
                 {
-                    "title": "Per PlayStation4",
-                    "description": "Clicca qua sotto sul simbolo",
-                    "roleID": 617655550036934656,
-                    "emoji": "<:ps:404716007140229120>"
+                    "title": "Ruoli Monster Hunter",
+                    "description": "Prendete qui il ruolo di Monster Hunter per le vecchie generazioni!",
+                    "roles": [
+                        {
+                            "title": "Per Generation Ultimate / XX",
+                            "description": "Clicca qua sotto sullo stemma della gilda",
+                            "roleID": 617664685852065792,
+                            "emoji": "<:mhxx:617703032670519297>"
+                        },
+                        {
+                            "title": "Per 4 Ultimate",
+                            "description": "Clicca qua sotto sul logo",
+                            "roleID": 617665548934709248,
+                            "emoji": "<:mh4u:617702430548951053>"
+                        },
+                        {
+                            "title": "Per tutti gli altri titoli",
+                            "description": "Clicca qua sotto sull'emblema",
+                            "roleID": 617664732509503488,
+                            "emoji": "<:monhunt:617702988634390547>"
+                        }
+                    ]
                 },
                 {
-                    "title": "Per XBoxOne",
-                    "description": "Clicca qua sotto sul simbolo",
-                    "roleID": 617655886495875093,
-                    "emoji": "<:xb:380668938067116032>"
-                },
+                    "textChannelID": "asdkdasdkjakjbababsasasfasf",
+                    "title": "Ruoli Monster Hunter World",
+                    "description": "Prendete qui il ruolo di Monster Hunter World relativo alla console che utilizzate per giocarci!",
+                    "roles": [
+                        {
+                            "title": "Per PlayStation4",
+                            "description": "Clicca qua sotto sul simbolo",
+                            "roleID": 617655550036934656,
+                            "emoji": "<:ps:404716007140229120>"
+                        },
+                        {
+                            "title": "Per XBoxOne",
+                            "description": "Clicca qua sotto sul simbolo",
+                            "roleID": 617655886495875093,
+                            "emoji": "<:xb:380668938067116032>"
+                        },
+                        {
+                            "title": "Per PC",
+                            "description": "Clicca qua sotto sul simbolo",
+                            "roleID": 617655930032488488,
+                            "emoji": "<:mhpc:404717227980488714>"
+                        }
+                    ]
+                },        
                 {
-                    "title": "Per PC",
-                    "description": "Clicca qua sotto sul simbolo",
-                    "roleID": 617655930032488488,
-                    "emoji": "<:mhpc:404717227980488714>"
+                    "title": "Ruolo Content Chat",
+                    "description": "Prendete qui il ruolo per seguire la Content Chat!",
+                    "roles": [
+                        {
+                            "roleID": 617665242977009680,
+                            "emoji": "<:youtube:404776393910779914>"
+                        }
+                       
+                    ]
+                },        
+                {
+                    "title": "Ruoli Zuccherino Cookies (Zucckies)",
+                    "description": "Prendete qui il ruolo per il minigioco dei biscotti di Zuccherino giocabile in #zucckies_defend",
+                    "roles": [
+                        {
+                            "title": "Per Cookie Defender",
+                            "description": "I guardiani del barattolo",
+                            "roleID": 745216682619830283,
+                            "emoji": "🍪"
+                        },
+                        {
+                            "title": "Per Cookie Monster",
+                            "description": "I mangiatori seriali",
+                            "roleID": 745217828939890748,
+                            "emoji": "👾"
+                        }   
+                    ]
                 }
-            ]
-        },
-
-        {
-            "title": "Ruolo Content Chat",
-            "description": "Prendete qui il ruolo per seguire la Content Chat!",
-            "roles": [
-                {
-                    "roleID": 617665242977009680,
-                    "emoji": "<:youtube:404776393910779914>"
-                }
-               
-            ]
-        },
-
-        {
-            "title": "Ruoli Zuccherino Cookies (Zucckies)",
-            "description": "Prendete qui il ruolo per il minigioco dei biscotti di Zuccherino giocabile in #zucckies_defend",
-            "roles": [
-                {
-                    "title": "Per Cookie Defender",
-                    "description": "I guardiani del barattolo",
-                    "roleID": 745216682619830283,
-                    "emoji": "🍪"
-                },
-                {
-                    "title": "Per Cookie Monster",
-                    "description": "I mangiatori seriali",
-                    "roleID": 745217828939890748,
-                    "emoji": "👾"
-                }   
             ]
         }
     ]
