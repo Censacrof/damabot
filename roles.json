@@ -6,11 +6,30 @@
             "groups": [
                 {
                     "title": "Benvenuti nel server ufficiale della community Italiana di Monster Hunter!!!",
-                    "description": "",
+                    "description": "In questo server sono presenti tanti cacciatori da community diverse, tutti con lo scopo di divertirsi e raccontare le proprie avventure!
+                    Se siete nuovi del software Discord, ecco una semplice guida alla sopravvivenza:
+                    • Cliccando con il tasto destro sul logo del server a sinistra, sarà possibile impostare le notifiche in modo che si venga avvisati solo delle menzioni come `@everyone`;
+                    • Se non si vuole ricevere notifiche da `@everyone`, si può disabilitare nella stessa pagina e ricevere solamente le proprie menzioni;
+                    • A sinistra trovate una lista di Canali, suddivisi tra Testuali con :hash:, Annunci con  :mega:  e Vocali con  :loud_sound:, potete accedervi cliccandoci semplicemente sopra.
+                    • In basso a sinistra, sotto i canali, c'è il vostro profilo. Da lì potete settare un'immagine profilo, cambiare il vostro nome per tutti i server e modificare le impostazioni relative a voce e audio per le chat vocali.
+                    • A destra c'è la lista degli utenti, per capire chi è online e per capire i ruoli che ci sono all'interno del server.
+                    • In alto, vicino al tasto per chiudere il programma, o alla barra di ricerca per intenderci, c'è un tasto a forma di puntina da disegno :pushpin: . Quell'icona è fondamentale perché in ogni canale ci sono messaggi fissati utili come guide del canale stesso o importanti consigli per la sopravvivenza su Monster Hunter e nel server.",
                     "roles": [
                         {
-                            "title": "Per partecipare alla nostra comunità...",
-                            "description": "...siete pregati di usare la reaction sotto questo messaggio, a dimostrazione che avete letto fin qui. Vi verrà assegnato un ruolo che vi permetterà di vedere le altre sezioni del server.",
+                            "title": "Regolamento Breve",
+                            "description": "Più approfondito in #regolamento 
+
+                            *1.* Rispettare gli altri utenti;
+                            *2.* Sono vietati discorsi a sfondo razzista, sessista, inneggianti a forme politiche estremiste e profani.
+                            *3.* Sono vietati materiali, link, discussioni e immagini a sfondo erotico, pedopornografico, gore o disturbanti.
+                            *4.* Niente spam non autorizzato;
+                            *5.* Utilizzare canali corretti;
+                            *6.* Niente guerre tra console o generazioni della serie;
+                            *7.* Non si insulta nessuno per il proprio modo di giocare, siamo qui per divertirci;
+                            *8.* Niente commercio di alcun bene per soldi reali all'interno di qualsiasi canale.
+                            
+                            Per partecipare alla nostra comunità siete pregati di usare la reaction sotto questo messaggio, a dimostrazione che avete letto fin qui.
+                            Vi verrà assegnato un ruolo che vi permetterà di vedere le altre sezioni del server.",
                             "roleID": 760789627157217300,
                             "emoji": "✅"
                         }
@@ -26,6 +45,18 @@
                     "title": "Ruoli Monster Hunter",
                     "description": "Prendete qui il ruolo di Monster Hunter per le vecchie generazioni!",
                     "roles": [
+                        {
+                            "title": "Per Rise",
+                            "description": "Clicca qua sotto sul Wirebug",
+                            "roleID": 769066246024855582,
+                            "emoji": "<:wire:769258724942020618>"
+                        },
+                        {
+                            "title": "Per Stories",
+                            "description": "Clicca qua sotto sulla pietra del legame",
+                            "roleID": 769066758531055627,
+                            "emoji": "<:stories:769076231114981386>"
+                        },
                         {
                             "title": "Per Generation Ultimate / XX",
                             "description": "Clicca qua sotto sullo stemma della gilda",
@@ -43,7 +74,8 @@
                             "description": "Clicca qua sotto sull'emblema",
                             "roleID": 617664732509503488,
                             "emoji": "<:monhunt:617702988634390547>"
-                        }
+                        },
+                        
                     ]
                 },
                 {
