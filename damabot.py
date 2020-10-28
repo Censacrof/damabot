@@ -33,6 +33,7 @@ if os.path.isfile(WATCHED_MESSAGES_FILE):
     except Exception as e:
         log.warning('Impossibile deserializzare watchedMessages')
 
+log.debug("watched_messages: " + str(watched_messages))
 
 @bot.event
 async def on_ready():
@@ -71,8 +72,19 @@ async def genera(ctx):
         await ctx.send(err)
         return
     
-    watched_messages = {}
-    for group in roleDefinitions['groups']:
+    # controllo che siano stati definiti dei ruoli per questo canale
+    channelID = str(ctx.message.channel.id)
+    channelRoleDefinitions = None
+    for chnRls in roleDefinitions:
+        if chnRls['channelID'] == channelID:
+            channelRoleDefinitions = chnRls
+            break
+    
+    if channelRoleDefinitions is None:
+        await ctx.send('Non sono stati definiti ruoli per questo canale. (ID del canale: ' + str(ctx.message.channel.id) + ')')    
+
+    watched_messages[channelID] = {}
+    for group in channelRoleDefinitions['groups']:
         embed = discord.Embed(title=group['title'], description=group['description'], color=0x08457E)
         
         for role in group['roles']:
@@ -112,7 +124,7 @@ async def genera(ctx):
                 'emojiID':  emoji.id,
                 'roleID':  role['roleID']
             })
-        watched_messages[str(msg.id)] = reactionRoleAssociation
+        watched_messages[channelID][str(msg.id)] = reactionRoleAssociation
 
     # serializzo watchedMessages
     log.info('Serializzo watchedMessage')
@@ -133,12 +145,19 @@ async def on_raw_reaction_add(payload):
     if payload.member.bot:
         return
 
+    channelID = str(payload.channel_id)
     msgid = str(payload.message_id)
-    if msgid in watched_messages:        
-        for assoc in watched_messages[msgid]:
-            if assoc['emojiName'] == payload.emoji.name and assoc['emojiID'] == payload.emoji.id:
-                role = discord.utils.get(payload.member.guild.roles, id=assoc['roleID'])
-                await payload.member.add_roles(role)    
+    
+    if channelID not in watched_messages:
+        return
+    
+    if msgid not in watched_messages[channelID]:
+        return
+    
+    for assoc in watched_messages[channelID][msgid]:
+        if assoc['emojiName'] == payload.emoji.name and assoc['emojiID'] == payload.emoji.id:
+            role = discord.utils.get(payload.member.guild.roles, id=assoc['roleID'])
+            await payload.member.add_roles(role)    
     pass
 
 @bot.event
@@ -146,12 +165,19 @@ async def on_raw_reaction_remove(payload):
     guild = await bot.fetch_guild(payload.guild_id)
     member = await guild.fetch_member(payload.user_id)
 
+    channelID = str(payload.channel_id)
     msgid = str(payload.message_id)
-    if msgid in watched_messages:        
-        for assoc in watched_messages[msgid]:
-            if assoc['emojiName'] == payload.emoji.name and assoc['emojiID'] == payload.emoji.id:
-                role = discord.utils.get(guild.roles, id=assoc['roleID'])
-                await member.remove_roles(role)
+
+    if channelID not in watched_messages:
+        return
+    
+    if msgid not in watched_messages[channelID]:
+        return
+
+    for assoc in watched_messages[channelID][msgid]:
+        if assoc['emojiName'] == payload.emoji.name and assoc['emojiID'] == payload.emoji.id:
+            role = discord.utils.get(guild.roles, id=assoc['roleID'])
+            await member.remove_roles(role)
     pass
 
 bot.run('NDAzODU0MDgyMDIxNzg1NjAx.WmHEbA.09g1vYH_jZ8kRuINuR4PfTGNohY')
