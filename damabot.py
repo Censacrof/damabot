@@ -53,8 +53,8 @@ async def clear(ctx):
     pass
 
 @bot.command()
-async def ruoli(ctx):
-    """Genera ed invia il messaggio di selezione ruolo"""
+async def genera(ctx):
+    """Genera ed invia il messaggio di selezione ruolo per il canale testuale in cui viene invocato"""
     global watched_messages
 
     # cancello in messaggio che contiene il comando
