@@ -5,9 +5,14 @@ import json
 import emoji as EMOJI
 import re
 import os
+import argparse
 
 WATCHED_MESSAGES_FILE = 'watched_messages.json'
 
+# configuro il parsing dei parametri di ingresso
+parser = argparse.ArgumentParser(description="La dama della gilda.")
+parser.add_argument('token', help="Il token del bot")
+args = parser.parse_args()
 
 # configuro il logger
 logging.basicConfig(
@@ -180,4 +185,4 @@ async def on_raw_reaction_remove(payload):
             await member.remove_roles(role)
     pass
 
-bot.run('NDAzODU0MDgyMDIxNzg1NjAx.WmHEbA.09g1vYH_jZ8kRuINuR4PfTGNohY')
+bot.run(args.token)
