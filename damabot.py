@@ -6,6 +6,7 @@ import emoji as EMOJI
 import re
 import os
 import argparse
+import threading
 
 WATCHED_MESSAGES_FILE = 'watched_messages.json'
 
@@ -183,6 +184,31 @@ async def on_raw_reaction_remove(payload):
         if assoc['emojiName'] == payload.emoji.name and assoc['emojiID'] == payload.emoji.id:
             role = discord.utils.get(guild.roles, id=assoc['roleID'])
             await member.remove_roles(role)
+    pass
+
+
+temporary_channels_lock = threading.Lock()
+temporary_channels = []
+@bot.event
+async def on_voice_state_update(member, before, after):
+    with temporary_channels_lock:
+        # eliminazione canale temporaneo
+        if before.channel and before.channel in temporary_channels:
+            if len(before.channel.members) == 0:
+                temporary_channels.remove(before.channel)
+                await before.channel.delete()
+
+        # creazione canale temporaneo
+        # ignoro gli eventi generati da canalai che non ci interessano
+        if not after.channel or after.channel.id != 835167835353120789:
+            return
+
+        # creo un canale
+        guild = after.channel.guild
+        newChannel = await guild.create_voice_channel(name="Nuova Stanza", category=after.channel.category)
+        temporary_channels.append(newChannel)
+        await member.move_to(newChannel)
+
     pass
 
 bot.run(args.token)
