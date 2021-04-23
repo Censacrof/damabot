@@ -41,9 +41,54 @@ if os.path.isfile(WATCHED_MESSAGES_FILE):
 
 log.debug("watched_messages: " + str(watched_messages))
 
+class TemporaryChannelsList:
+    def __init__(self, filePath):
+        self.filePath = filePath
+        self.lock = threading.RLock()
+        self._channels = []
+
+        self._load()
+
+    def _load(self):
+        try:
+            with open(self.filePath, 'r') as f, self.lock:
+                self._channels = json.load(f)
+        except Exception as e:
+            log.warning('Impossibile caricare la lista dei canali temporanei da \'{}\': {}'.format(self.filePath, str(e)))
+            self._channels = []
+
+    def _save(self):
+        try:
+            with open(self.filePath, 'w') as f, self.lock:
+                json.dump(self._channels, f)
+        except Exception as e:
+            log.warning('Impossibile salvare la lista dei canali temporanei in \'{}\': {}'.format(self.filePath, str(e)))
+    
+    def get_list(self):
+        return self._channels.copy()
+    
+    def add_channel(self, channelID):
+        self._channels.append(channelID)
+        self._save()
+
+    def remove_channel(self, channelID):
+        self._channels.remove(channelID)
+        self._save()
+temporary_channels = TemporaryChannelsList('temporary_channels.json')
+
 @bot.event
 async def on_ready():
     log.info('Login effettuato come {0.user}'.format(bot))
+
+    with temporary_channels.lock:
+        for channelID in temporary_channels.get_list():
+            channel = await bot.fetch_channel(channelID)
+            try:
+                await channel.delete()
+            except Exception:
+                pass
+        temporary_channels._channels = []
+        temporary_channels._save()
 
 # comandi
 @bot.command()
@@ -187,16 +232,19 @@ async def on_raw_reaction_remove(payload):
     pass
 
 
-temporary_channels_lock = threading.Lock()
-temporary_channels = []
 @bot.event
 async def on_voice_state_update(member, before, after):
-    with temporary_channels_lock:
+    with temporary_channels.lock:
         # eliminazione canale temporaneo
-        if before.channel and before.channel in temporary_channels:
-            if len(before.channel.members) == 0:
-                temporary_channels.remove(before.channel)
-                await before.channel.delete()
+        if before.channel and before.channel.id in temporary_channels.get_list():
+            members = (await bot.fetch_channel(before.channel.id)).members
+            print(members)
+            if len(members) == 0:
+                temporary_channels.remove_channel(before.channel.id)
+                try:
+                    await before.channel.delete()
+                except Exception:
+                    pass
 
         # creazione canale temporaneo
         # ignoro gli eventi generati da canalai che non ci interessano
@@ -206,9 +254,7 @@ async def on_voice_state_update(member, before, after):
         # creo un canale
         guild = after.channel.guild
         newChannel = await guild.create_voice_channel(name="Nuova Stanza", category=after.channel.category)
-        temporary_channels.append(newChannel)
+        temporary_channels.add_channel(newChannel.id)
         await member.move_to(newChannel)
-
-    pass
 
 bot.run(args.token)
