@@ -81,10 +81,10 @@ class Roles(commands.Cog):
             return 
 
         self._watched_messages[channelID] = {}
-        for group in channelRoleDefinitions['groups']:
-            embed = discord.Embed(title=group['title'], description=group['description'], color=0x08457E)
+        for section in channelRoleDefinitions['sections']:
+            embed = discord.Embed(title=section['title'], description=section['description'], color=0x08457E)
             
-            for role in group['roles']:
+            for role in section['roles']:
                 reg = r'[^\s]'
                 if 'title' in role and role['title'] is not None\
                 and re.search(reg, role['title']) is not None\
@@ -96,7 +96,7 @@ class Roles(commands.Cog):
             msg = await ctx.send(embed=embed)
             
             reactionRoleAssociation = []
-            for role in group['roles']:
+            for role in section['roles']:
                 emoji = None
                 if role['emoji'] in EMOJI.UNICODE_EMOJI:
                     # emoji unicode

@@ -10,12 +10,12 @@
 				"description": "The id of the channel",
 				"type": "integer"
             },          
-			"groups": {
-            	"description": "An array of groups",
+			"sections": {
+            	"description": "An array of sections",
                 "type": "array",				
 				"items": {
-                  	"title": "Group",
-					"description": "A group is a message with a set of roles selection attached to it",
+                  	"title": "Section",
+					"description": "A section is a message with a set of role selections attached to it",
 					"type": "object",
 					"properties": {
 						"title": {
@@ -55,7 +55,7 @@
 				"minItems": 1
             }
         },
-		"required": ["channelID", "groups"]
+		"required": ["channelID", "sections"]
     },
 	"minItems": 0
 }
