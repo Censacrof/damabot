@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import json
+import os
 import threading
 
 class TemporaryChannels(commands.Cog):
@@ -8,7 +9,13 @@ class TemporaryChannels(commands.Cog):
         self.bot = bot
         self.log = log
 
-        self._temporary_channels = self.TemporaryChannelsList('temporary_channels.json', log)
+        if not os.path.exists('cache'):
+            os.mkdir('cache')
+
+        self.TEMPORARY_CHANNELS_FILE = 'cache/temporary_channels.cache'
+        self.CONFIG_FILE = 'temporary_channels_config.json'
+
+        self._temporary_channels = self.TemporaryChannelsList(self.TEMPORARY_CHANNELS_FILE, log)
 
     # events
     @commands.Cog.listener()

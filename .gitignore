@@ -133,3 +133,6 @@ dmypy.json
 
 # log
 damabot.log
+
+# cache
+cache/

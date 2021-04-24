@@ -11,7 +11,11 @@ class Roles(commands.Cog):
         self.bot = bot
         self.log = log
 
-        self.WATCHED_MESSAGES_FILE = 'watched_messages.json'
+        if not os.path.exists('cache'):
+            os.mkdir('cache')
+
+        self.WATCHED_MESSAGES_FILE = 'cache/watched_messages.cache'
+        self.CONFIG_FILE = 'roles_config.json'
 
         # carico il dizionario dei messaggi da controllare
         self._watched_messages = {}
@@ -48,7 +52,7 @@ class Roles(commands.Cog):
         # apro il file contenente le definizioni dei ruoli
         roleDefinitions = None
         try:
-            with open('roles.json', 'r') as roles_file:
+            with open(self.CONFIG_FILE, 'r') as roles_file:
                 roleDefinitions =  json.load(roles_file)
         except Exception as e:
             err = 'Errore: Impossibile fare il parsing dei ruoli\n' + ' - ' + str(e)
@@ -113,7 +117,7 @@ class Roles(commands.Cog):
         # serializzo watchedMessages
         self.log.info('Serializzo watchedMessage')
         try:
-            with open('watched_messages.json', 'w') as f:
+            with open(self.WATCHED_MESSAGES_FILE, 'w') as f:
                 json.dump(self._watched_messages, f, ensure_ascii=False)
                 f.close()
         except Exception as e:
