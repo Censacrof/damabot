@@ -1,0 +1,61 @@
+{
+	"$schema": "https://json-schema.org/draft/2019-09/schema",
+    "title": "Text channels list",
+	"description": "A list of text channels where the bot should generate messages",      
+	"type": "array",
+    "items": {
+		"type": "object",
+        "properties": {
+			"channelID": {
+				"description": "The id of the channel",
+				"type": "string"
+            },          
+			"groups": {
+            	"description": "An array of groups",
+                "type": "array",				
+				"items": {
+                  	"title": "Group",
+					"description": "A group is a message with a set of roles selection attached to it",
+					"type": "object",
+					"properties": {
+						"title": {
+							"type": "string"
+                        },
+						"description": {
+							"type": "string" 
+                        },
+						"roles": {
+							"type": "array",
+							"items": {
+								"title": "Role definition",
+								"description": "Defines the role and it's associated emoji",
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string"
+                                    },
+									"description": {
+										"type": "string"
+                                    },
+									"roleID": {
+										"type": "integer"								
+                                    },
+									"emoji": {
+										"type": "string",
+										"description": "Can either be a unicode emoji or the id of a discord emoji"
+                                    }
+                                },
+								"required": ["roleID", "emoji"]
+                            },
+							"minItems": 1
+                        }
+                    },
+					"required": ["title", "description", "roles"]
+                },
+				"minItems": 1
+            }
+        },
+		"required": ["channelID", "groups"]
+    },
+	"minItems": 0
+}

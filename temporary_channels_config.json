@@ -1,0 +1,9 @@
+{
+    "temporaryVoiceChannels": [
+        {
+            "autoMoveChannelID": 835167835353120789,            
+            "newChannelName": "Nuova Stanza {count}",
+            "slots": 4
+        }
+    ]
+}

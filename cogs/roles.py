@@ -5,6 +5,8 @@ import emoji as EMOJI
 import re
 import os
 import argparse
+import importlib.resources 
+import jsonschema
 
 class Roles(commands.Cog):
     def __init__(self, bot, log):
@@ -13,6 +15,10 @@ class Roles(commands.Cog):
 
         if not os.path.exists('cache'):
             os.mkdir('cache')
+
+        with importlib.resources.path('cogs.schema', 'roles_config_schema.json') as schema_path:
+            with open(schema_path, 'r') as f:
+                self._config_schema = json.load(f)
 
         self.WATCHED_MESSAGES_FILE = 'cache/watched_messages.cache'
         self.CONFIG_FILE = 'roles_config.json'
@@ -54,8 +60,10 @@ class Roles(commands.Cog):
         try:
             with open(self.CONFIG_FILE, 'r') as roles_file:
                 roleDefinitions =  json.load(roles_file)
+                jsonschema.validate(roleDefinitions, self._config_schema)
+
         except Exception as e:
-            err = 'Errore: Impossibile fare il parsing dei ruoli\n' + ' - ' + str(e)
+            err = 'Errore: Impossibile fare il parsing dei ruoli' + ' - ' + str(e)
             self.log.error(err)
             await ctx.send(err)
             return
