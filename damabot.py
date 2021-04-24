@@ -238,7 +238,6 @@ async def on_voice_state_update(member, before, after):
         # eliminazione canale temporaneo
         if before.channel and before.channel.id in temporary_channels.get_list():
             members = (await bot.fetch_channel(before.channel.id)).members
-            print(members)
             if len(members) == 0:
                 temporary_channels.remove_channel(before.channel.id)
                 try:
