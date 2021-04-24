@@ -4,7 +4,7 @@ import logging
 import argparse
 
 from cogs.roles import Roles
-from cogs.temporarychannels import TemporaryChannels
+from cogs.temporary_channels import TemporaryChannels
 
 # configuro il parsing dei parametri di ingresso
 parser = argparse.ArgumentParser(description="La dama della gilda.")

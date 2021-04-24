@@ -6,19 +6,19 @@ import re
 import os
 import argparse
 
-WATCHED_MESSAGES_FILE = 'watched_messages.json'
-
 class Roles(commands.Cog):
     def __init__(self, bot, log):
         self.bot = bot
         self.log = log
-    
+
+        self.WATCHED_MESSAGES_FILE = 'watched_messages.json'
+
         # carico il dizionario dei messaggi da controllare
-        self.watched_messages = {}
-        if os.path.isfile(WATCHED_MESSAGES_FILE):
+        self._watched_messages = {}
+        if os.path.isfile(self.WATCHED_MESSAGES_FILE):
             try:
-                with open(WATCHED_MESSAGES_FILE, 'r') as f:
-                    self.watched_messages = json.load(f)
+                with open(self.WATCHED_MESSAGES_FILE, 'r') as f:
+                    self._watched_messages = json.load(f)
                     f.close()
                     self.log.info('Deserializzato watchedMessages')
             except Exception:
@@ -67,7 +67,7 @@ class Roles(commands.Cog):
         if channelRoleDefinitions is None:
             await ctx.send('Non sono stati definiti ruoli per questo canale. (ID del canale: ' + str(ctx.message.channel.id) + ')')    
 
-        self.watched_messages[channelID] = {}
+        self._watched_messages[channelID] = {}
         for group in channelRoleDefinitions['groups']:
             embed = discord.Embed(title=group['title'], description=group['description'], color=0x08457E)
             
@@ -108,13 +108,13 @@ class Roles(commands.Cog):
                     'emojiID':  emoji.id,
                     'roleID':  role['roleID']
                 })
-            self.watched_messages[channelID][str(msg.id)] = reactionRoleAssociation
+            self._watched_messages[channelID][str(msg.id)] = reactionRoleAssociation
 
         # serializzo watchedMessages
         self.log.info('Serializzo watchedMessage')
         try:
             with open('watched_messages.json', 'w') as f:
-                json.dump(self.watched_messages, f, ensure_ascii=False)
+                json.dump(self._watched_messages, f, ensure_ascii=False)
                 f.close()
         except Exception as e:
             err = 'Errore: Impossibile serializzare watchedMessages\n' + ' - ' + str(e)
@@ -133,13 +133,13 @@ class Roles(commands.Cog):
         channelID = str(payload.channel_id)
         msgid = str(payload.message_id)
         
-        if channelID not in self.watched_messages:
+        if channelID not in self._watched_messages:
             return
         
-        if msgid not in self.watched_messages[channelID]:
+        if msgid not in self._watched_messages[channelID]:
             return
         
-        for assoc in self.watched_messages[channelID][msgid]:
+        for assoc in self._watched_messages[channelID][msgid]:
             if assoc['emojiName'] == payload.emoji.name and assoc['emojiID'] == payload.emoji.id:
                 role = discord.utils.get(payload.member.guild.roles, id=assoc['roleID'])
                 await payload.member.add_roles(role)    
@@ -153,13 +153,13 @@ class Roles(commands.Cog):
         channelID = str(payload.channel_id)
         msgid = str(payload.message_id)
 
-        if channelID not in self.watched_messages:
+        if channelID not in self._watched_messages:
             return
         
-        if msgid not in self.watched_messages[channelID]:
+        if msgid not in self._watched_messages[channelID]:
             return
 
-        for assoc in self.watched_messages[channelID][msgid]:
+        for assoc in self._watched_messages[channelID][msgid]:
             if assoc['emojiName'] == payload.emoji.name and assoc['emojiID'] == payload.emoji.id:
                 role = discord.utils.get(guild.roles, id=assoc['roleID'])
                 await member.remove_roles(role)
