@@ -69,7 +69,7 @@ class Roles(commands.Cog):
             return
         
         # controllo che siano stati definiti dei ruoli per questo canale
-        channelID = str(ctx.message.channel.id)
+        channelID = ctx.message.channel.id
         channelRoleDefinitions = None
         for chnRls in roleDefinitions:
             if chnRls['channelID'] == channelID:
@@ -77,7 +77,8 @@ class Roles(commands.Cog):
                 break
         
         if channelRoleDefinitions is None:
-            await ctx.send('Non sono stati definiti ruoli per questo canale. (ID del canale: ' + str(ctx.message.channel.id) + ')')    
+            await ctx.send('Non sono stati definiti ruoli per questo canale. (ID del canale: ' + str(ctx.message.channel.id) + ')')
+            return 
 
         self._watched_messages[channelID] = {}
         for group in channelRoleDefinitions['groups']:
@@ -120,7 +121,7 @@ class Roles(commands.Cog):
                     'emojiID':  emoji.id,
                     'roleID':  role['roleID']
                 })
-            self._watched_messages[channelID][str(msg.id)] = reactionRoleAssociation
+            self._watched_messages[channelID][msg.id] = reactionRoleAssociation
 
         # serializzo watchedMessages
         self.log.info('Serializzo watchedMessage')
@@ -142,8 +143,8 @@ class Roles(commands.Cog):
         if payload.member.bot:
             return
 
-        channelID = str(payload.channel_id)
-        msgid = str(payload.message_id)
+        channelID = payload.channel_id
+        msgid = payload.message_id
         
         if channelID not in self._watched_messages:
             return
@@ -162,8 +163,8 @@ class Roles(commands.Cog):
         guild = await self.bot.fetch_guild(payload.guild_id)
         member = await guild.fetch_member(payload.user_id)
 
-        channelID = str(payload.channel_id)
-        msgid = str(payload.message_id)
+        channelID = payload.channel_id
+        msgid = payload.message_id
 
         if channelID not in self._watched_messages:
             return
