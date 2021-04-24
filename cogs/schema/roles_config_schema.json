@@ -1,29 +1,29 @@
 {
 	"$schema": "https://json-schema.org/draft/2019-09/schema",
-    "title": "Text channels list",
+	"title": "Text channels list",
 	"description": "A list of text channels where the bot should generate messages",      
 	"type": "array",
-    "items": {
+	"items": {
 		"type": "object",
-        "properties": {
+		"properties": {
 			"channelID": {
 				"description": "The id of the channel",
 				"type": "integer"
-            },          
+			},          
 			"sections": {
-            	"description": "An array of sections",
-                "type": "array",				
+				"description": "An array of sections",
+				"type": "array",				
 				"items": {
-                  	"title": "Section",
+				  	"title": "Section",
 					"description": "A section is a message with a set of role selections attached to it",
 					"type": "object",
 					"properties": {
 						"title": {
 							"type": "string"
-                        },
+						},
 						"description": {
 							"type": "string" 
-                        },
+						},
 						"roles": {
 							"type": "array",
 							"items": {
@@ -33,29 +33,29 @@
 								"properties": {
 									"title": {
 										"type": "string"
-                                    },
+									},
 									"description": {
 										"type": "string"
-                                    },
+									},
 									"roleID": {
 										"type": "integer"								
-                                    },
+									},
 									"emoji": {
 										"type": "string",
 										"description": "Can either be a unicode emoji or the id of a discord emoji"
-                                    }
-                                },
+									}
+								},
 								"required": ["roleID", "emoji"]
-                            },
+							},
 							"minItems": 1
-                        }
-                    },
+						}
+					},
 					"required": ["title", "description", "roles"]
-                },
+				},
 				"minItems": 1
-            }
-        },
+			}
+		},
 		"required": ["channelID", "sections"]
-    },
+	},
 	"minItems": 0
 }
