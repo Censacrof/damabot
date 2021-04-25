@@ -7,6 +7,7 @@ import os
 import argparse
 import importlib.resources 
 import jsonschema
+import shutil
 
 class Roles(commands.Cog):
     def __init__(self, bot, log):
@@ -16,12 +17,18 @@ class Roles(commands.Cog):
         if not os.path.exists('cache'):
             os.mkdir('cache')
 
-        with importlib.resources.path('cogs.schema', 'roles_config_schema.json') as schema_path:
+        with importlib.resources.path('cogs.resources', 'roles_config_schema.json') as schema_path:
             with open(schema_path, 'r') as f:
                 self._config_schema = json.load(f)
 
         self.WATCHED_MESSAGES_FILE = 'cache/watched_messages.cache'
         self.CONFIG_FILE = 'roles_config.json'
+
+        # se non è presente copio un file di configurazione di default
+        if not os.path.isfile(self.CONFIG_FILE):
+            with importlib.resources.path('cogs.resources', 'roles_config_default.json') as default_cfg_path:
+                shutil.copy2(default_cfg_path, self.CONFIG_FILE)
+                
 
         # carico il dizionario dei messaggi da controllare
         self._watched_messages = {}

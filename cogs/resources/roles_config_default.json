@@ -1,0 +1,25 @@
+[
+    {
+        "channelID": 0,
+        "sections": [
+            {
+                "title": "Welcome to Lilliput!",
+                "description": "Please, pick one of these roles",
+                "roles": [
+                    {
+                        "title": "Little-Endian",
+                        "description": "Pick this role if you crack open your soft-boiled eggs from the little end 👆🥚",
+                        "roleID": 0,
+                        "emoji": "👆"
+                    },
+                    {
+                        "title": "Big-Endian",
+                        "description": "Pick this role if you crack open your soft-boiled eggs from the big end 👇🥚",
+                        "roleID": 0,
+                        "emoji": "👇"
+                    }
+                ]
+            }
+        ]
+    }
+]
