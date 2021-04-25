@@ -16,13 +16,15 @@ class Roles(commands.Cog):
 
         if not os.path.exists('cache'):
             os.mkdir('cache')
+        if not os.path.exists('config'):
+            os.mkdir('config')
 
         with importlib.resources.path('cogs.resources', 'roles_config_schema.json') as schema_path:
             with open(schema_path, 'r') as f:
                 self._config_schema = json.load(f)
 
         self.WATCHED_MESSAGES_FILE = 'cache/watched_messages.cache'
-        self.CONFIG_FILE = 'roles_config.json'
+        self.CONFIG_FILE = 'config/roles.json'
 
         # if the config file doesn't exists copy the default one
         if not os.path.isfile(self.CONFIG_FILE):

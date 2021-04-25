@@ -14,9 +14,11 @@ class TemporaryChannels(commands.Cog):
 
         if not os.path.exists('cache'):
             os.mkdir('cache')
+        if not os.path.exists('config'):
+            os.mkdir('config')
 
         self.TEMPORARY_CHANNELS_FILE = 'cache/temporary_channels.cache'
-        self.CONFIG_FILE = 'temporary_channels_config.json'
+        self.CONFIG_FILE = 'config/temporary_channels.json'
 
         # if the config file doesn't exists copy the default one
         if not os.path.isfile(self.CONFIG_FILE):

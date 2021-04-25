@@ -135,7 +135,7 @@ dmypy.json
 damabot.log
 
 # cache
-cache/
+/cache/
 
 # config files
-/*_config.json
+/config/
