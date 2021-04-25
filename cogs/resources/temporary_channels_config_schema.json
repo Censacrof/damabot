@@ -1,0 +1,23 @@
+{
+	"$schema": "https://json-schema.org/draft/2019-09/schema",
+    "title": "Temporary channel definitions list",
+	"description": "A list of temporary channels definitions",      
+	"type": "array",
+    "items": {
+		"title": "Temporary channel definition",
+		"type": "object",
+		"properties": {
+			"generatorChannelID": {
+				"type": "integer"
+            },
+			"newChannelNameTemplate": {
+				"type": "string" 
+            },
+			"userLimit": {
+				"type": "integer"
+            }
+        },
+		"required": ["generatorChannelID", "newChannelNameTemplate"]
+    },
+	"minItems": 0
+}
