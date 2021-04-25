@@ -1,2 +1,2 @@
 # damabot
-La dama della gilda
+Dama takes care of the guild members' roles and makes sure there's always room for everybody

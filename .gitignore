@@ -136,3 +136,6 @@ damabot.log
 
 # cache
 cache/
+
+# config files
+/*_config.json

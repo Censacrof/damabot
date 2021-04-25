@@ -24,45 +24,44 @@ class Roles(commands.Cog):
         self.WATCHED_MESSAGES_FILE = 'cache/watched_messages.cache'
         self.CONFIG_FILE = 'roles_config.json'
 
-        # se non è presente copio un file di configurazione di default
+        # if the config file doesn't exists copy the default one
         if not os.path.isfile(self.CONFIG_FILE):
             with importlib.resources.path('cogs.resources', 'roles_config_default.json') as default_cfg_path:
                 shutil.copy2(default_cfg_path, self.CONFIG_FILE)
                 
 
-        # carico il dizionario dei messaggi da controllare
+        # load the dict of messages to check
         self._watched_messages = {}
         if os.path.isfile(self.WATCHED_MESSAGES_FILE):
             try:
                 with open(self.WATCHED_MESSAGES_FILE, 'r') as f:
                     self._watched_messages = json.load(f)
                     f.close()
-                    self.log.info('Deserializzato watchedMessages')
+                    self.log.info('Deserialize watchedMessages')
             except Exception:
-                self.log.warning('Impossibile deserializzare watchedMessages')
+                self.log.warning('Can\'t deserialize watchedMessages')
     
-    # comandi
     @commands.command()
     async def ping(self, ctx):
-        """Risponde pong! utile per testare se il bot e' online"""
+        """Answers pong! Useful to check if the bot is online"""
         await ctx.send('pong!')
         pass
 
     @commands.command()
     async def clear(self, ctx):
-        """Rimove tutti i messaggi dal canale testuale"""
+        """Removes all messages from the text channel"""
         async for message in ctx.channel.history():
             await message.delete()
         pass
 
     @commands.command()
-    async def genera(self, ctx):
-        """Genera ed invia il messaggio di selezione ruolo per il canale testuale in cui viene invocato"""
+    async def generate(self, ctx):
+        """Generates the role selection messages for the text channel in which is invoked"""
 
-        # cancello in messaggio che contiene il comando
+        # delete the command message
         await ctx.message.delete()
 
-        # apro il file contenente le definizioni dei ruoli
+        # load the role definitions from the config
         roleDefinitions = None
         try:
             with open(self.CONFIG_FILE, 'r') as roles_file:
@@ -70,12 +69,12 @@ class Roles(commands.Cog):
                 jsonschema.validate(roleDefinitions, self._config_schema)
 
         except Exception as e:
-            err = 'Errore: Impossibile fare il parsing dei ruoli' + ' - ' + str(e)
+            err = 'Can\'t parse \'{}\': {}'.format(self.CONFIG_FILE, str(e))
             self.log.error(err)
             await ctx.send(err)
             return
         
-        # controllo che siano stati definiti dei ruoli per questo canale
+        # check that there are roles are defined for this channel che siano stati definiti dei ruoli per questo canale
         channelID = ctx.message.channel.id
         channelRoleDefinitions = None
         for chnRls in roleDefinitions:
@@ -84,8 +83,8 @@ class Roles(commands.Cog):
                 break
         
         if channelRoleDefinitions is None:
-            await ctx.send('Non sono stati definiti ruoli per questo canale. (ID del canale: ' + str(ctx.message.channel.id) + ')')
-            return 
+            await ctx.send('There are no roles defined for this channel. (Channel ID: {})'.format(str(ctx.message.channel.id)))
+            return
 
         self._watched_messages[channelID] = {}
         for section in channelRoleDefinitions['sections']:
@@ -106,20 +105,20 @@ class Roles(commands.Cog):
             for role in section['roles']:
                 emoji = None
                 if role['emoji'] in EMOJI.UNICODE_EMOJI:
-                    # emoji unicode
+                    # unicode emoji
                     emoji = discord.PartialEmoji(name=role['emoji'])
                 else:
-                    # emoji custom
+                    # custom emoji
                     match = re.match('^\\<:[^:]+:([0-9]+)\\>$', role['emoji'])
 
                     if match is not None:
-                        # se la regex ha prodotto un match uso l' id dell'emoji per trovarla
+                        # if there is a match use the emoji's id to get it
                         fullEmoji = self.bot.get_emoji(int(match.group(1)))
                         if fullEmoji is not None:
                             emoji = discord.PartialEmoji(id=fullEmoji.id, name=fullEmoji.name, animated=fullEmoji.animated)
 
                 if emoji is None:
-                    self.log.warning("Non e' stata trovata un emoji corrispondente a: " + role['emoji'])
+                    self.log.warning('Couldn\'t find an emoji that corresponds to \'{}\''.format(role['emoji']))
                     continue
 
                 await msg.add_reaction(emoji)
@@ -130,23 +129,23 @@ class Roles(commands.Cog):
                 })
             self._watched_messages[channelID][msg.id] = reactionRoleAssociation
 
-        # serializzo watchedMessages
-        self.log.info('Serializzo watchedMessage')
+        # serialize watchedMessages
+        self.log.info('Serializing watchedMessage')
         try:
             with open(self.WATCHED_MESSAGES_FILE, 'w') as f:
                 json.dump(self._watched_messages, f, ensure_ascii=False)
                 f.close()
         except Exception as e:
-            err = 'Errore: Impossibile serializzare watchedMessages\n' + ' - ' + str(e)
+            err = 'Can\'t serialize watchedMessages: {}'.format(str(e))
             self.log.error(err)
             await ctx.send(err)
             return
         pass
 
-    # eventi
+
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
-        # se la reaction e' stata messa dal bot stesso la ignoro
+        # if the reaction was added by the bot i return
         if payload.member.bot:
             return
 
