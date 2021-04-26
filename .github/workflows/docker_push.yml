@@ -20,7 +20,7 @@ jobs:
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
   push:
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
