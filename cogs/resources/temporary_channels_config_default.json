@@ -1,7 +1,7 @@
 [
     {
         "generatorChannelID": 0,            
-        "newChannelNameTemplate": "New room {count}",
+        "newChannelNameTemplate": "New room {room_number}",
         "slots": 4
     }
 ]

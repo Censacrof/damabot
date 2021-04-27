@@ -6,11 +6,17 @@ import threading
 import importlib
 import jsonschema
 import shutil
+import bisect
 
 class TemporaryChannels(commands.Cog):
     def __init__(self, bot, log):
         self.bot = bot
         self.log = log
+
+        self._room_number_lock = threading.Lock()
+        self._highest_room_number = 0
+        self._freed_room_numbers = []
+        self._channel_room_number = {}
 
         if not os.path.exists('cache'):
             os.mkdir('cache')
@@ -45,9 +51,9 @@ class TemporaryChannels(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         with self._temporary_channels.lock:
-            for channelID in self._temporary_channels.get_list():
-                channel = await self.bot.fetch_channel(channelID)
+            for channelID in self._temporary_channels.get_list():                
                 try:
+                    channel = await self.bot.fetch_channel(channelID)
                     await channel.delete()
                     self._temporary_channels.remove_channel(channelID)
                 except Exception:
@@ -67,6 +73,7 @@ class TemporaryChannels(commands.Cog):
                     if len(members) == 0:
                         await before.channel.delete()
                         self._temporary_channels.remove_channel(before.channel.id)
+                        self._free_room_number(before.channel.id)
                 except Exception:
                     pass
 
@@ -79,21 +86,44 @@ class TemporaryChannels(commands.Cog):
             # create a channel
             guild = after.channel.guild
             new_channel_name = None
+            room_number = self._next_room_number()
             try:
-                new_channel_name = creator_channel_definition['newChannelNameTemplate'].format_map({'count': 1})
+                new_channel_name = creator_channel_definition['newChannelNameTemplate'].format_map({'room_number': room_number})
             except:
                 new_channel_name = creator_channel_definition['newChannelNameTemplate']
 
-            new_channel = await guild.create_voice_channel(
-                name=new_channel_name,
-                category=after.channel.category,
-                
-                # if specified in the config set the user_limit parameter
-                **({'user_limit': creator_channel_definition['userLimit']} if 'userLimit' in creator_channel_definition else {})
-            )
+            try:
+                new_channel = await guild.create_voice_channel(
+                    name=new_channel_name,
+                    category=after.channel.category,
+                    
+                    # if specified in the config set the user_limit parameter
+                    **({'user_limit': creator_channel_definition['userLimit']} if 'userLimit' in creator_channel_definition else {})
+                )
+                self._channel_room_number[new_channel.id] = room_number
+            except Exception as e:
+                self.log.error('Can\'t create temporary channel \'{}\': {}', new_channel_name, str(e))
+                self._free_room_number(room_number)
+                return
+            
+            self._channel_room_number[new_channel.id] = room_number
             self._temporary_channels.add_channel(new_channel.id)
             await member.move_to(new_channel)
     
+    def _next_room_number(self):
+        with self._room_number_lock:
+            if len(self._freed_room_numbers) == 0:
+                self._highest_room_number += 1
+                return self._highest_room_number
+            else:
+                least = self._freed_room_numbers.pop(0)
+                return least
+
+    def _free_room_number(self, channel_id):
+        with self._room_number_lock:
+            bisect.insort(self._freed_room_numbers, self._channel_room_number[channel_id])
+            del self._channel_room_number[channel_id]
+
     # class that manages cuncurrent access to the cache file
     class TemporaryChannelsList:
         def __init__(self, filePath, log):
