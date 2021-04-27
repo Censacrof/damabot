@@ -7,8 +7,8 @@ from cogs.roles import Roles
 from cogs.temporary_channels import TemporaryChannels
 
 # configure argument parsing
-parser = argparse.ArgumentParser(description="La dama della gilda.")
-parser.add_argument('token', help="Il token del bot")
+parser = argparse.ArgumentParser(description="Damabot")
+parser.add_argument('token', help="the bot's token")
 args = parser.parse_args()
 
 # configure logger
