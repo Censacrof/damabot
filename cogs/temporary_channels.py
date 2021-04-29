@@ -45,17 +45,17 @@ class TemporaryChannels(commands.Cog):
             self.log.error(err)
             self._config = None
 
-        self._temporary_channels = self.TemporaryChannelsList(self.TEMPORARY_CHANNELS_FILE, log)
+        self._temporary_channels_cache = self.CacheManager(self.TEMPORARY_CHANNELS_FILE, log)
 
 
     @commands.Cog.listener()
     async def on_ready(self):
-        with self._temporary_channels.lock:
-            for channelID in self._temporary_channels.get_list():                
+        with self._temporary_channels_cache.lock:
+            for channelID in self._temporary_channels_cache.get_list():                
                 try:
                     channel = await self.bot.fetch_channel(channelID)
                     await channel.delete()
-                    self._temporary_channels.remove_channel(channelID)
+                    self._temporary_channels_cache.remove_channel(channelID)
                 except Exception:
                     pass
     
@@ -64,15 +64,15 @@ class TemporaryChannels(commands.Cog):
         if not self._config:
             return
 
-        with self._temporary_channels.lock:
+        with self._temporary_channels_cache.lock:
             # if the channel the user was in is a temporary channel
             # and now it's empty delete it
-            if before.channel and before.channel.id in self._temporary_channels.get_list():
+            if before.channel and before.channel.id in self._temporary_channels_cache.get_list():
                 try:
                     members = (await self.bot.fetch_channel(before.channel.id)).members
                     if len(members) == 0:
                         await before.channel.delete()
-                        self._temporary_channels.remove_channel(before.channel.id)
+                        self._temporary_channels_cache.remove_channel(before.channel.id)
                         self._free_room_number(before.channel.id)
                 except Exception as e:
                     self.log.warning('Can\'t delete temporary channel \'{}\': {}'.format(before.channel.name, str(e)))
@@ -107,7 +107,7 @@ class TemporaryChannels(commands.Cog):
                 return
             
             self._channel_room_number[new_channel.id] = room_number
-            self._temporary_channels.add_channel(new_channel.id)
+            self._temporary_channels_cache.add_channel(new_channel.id)
             await member.move_to(new_channel)
     
     def _next_room_number(self):
@@ -125,7 +125,7 @@ class TemporaryChannels(commands.Cog):
             del self._channel_room_number[channel_id]
 
     # class that manages cuncurrent access to the cache file
-    class TemporaryChannelsList:
+    class CacheManager:
         def __init__(self, filePath, log):
             self.filePath = filePath
             self.log = log
