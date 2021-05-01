@@ -39,7 +39,7 @@ class Roles(commands.Cog):
                 with open(self.WATCHED_MESSAGES_FILE, 'r') as f:
                     self._watched_messages = json.load(f)
                     f.close()
-                    self.log.info('Deserialize watchedMessages')
+                    self.log.info('Deserializing \'{}\''.format(self.WATCHED_MESSAGES_FILE))
             except Exception:
                 self.log.warning('Can\'t deserialize watchedMessages')
     
@@ -152,15 +152,17 @@ class Roles(commands.Cog):
             return
 
         channelID = payload.channel_id
+        channelID_str = str(channelID)
         msgid = payload.message_id
+        msgid_str = str(msgid)
         
-        if channelID not in self._watched_messages:
+        if channelID_str not in self._watched_messages:
             return
         
-        if msgid not in self._watched_messages[channelID]:
+        if msgid_str not in self._watched_messages[channelID_str]:
             return
         
-        for assoc in self._watched_messages[channelID][msgid]:
+        for assoc in self._watched_messages[channelID_str][msgid_str]:
             if assoc['emojiName'] == payload.emoji.name and assoc['emojiID'] == payload.emoji.id:
                 role = discord.utils.get(payload.member.guild.roles, id=assoc['roleID'])
                 await payload.member.add_roles(role)    
@@ -172,15 +174,17 @@ class Roles(commands.Cog):
         member = await guild.fetch_member(payload.user_id)
 
         channelID = payload.channel_id
+        channelID_str = str(channelID)
         msgid = payload.message_id
+        msgid_str = str(msgid)
 
-        if channelID not in self._watched_messages:
+        if channelID_str not in self._watched_messages:
             return
         
-        if msgid not in self._watched_messages[channelID]:
+        if msgid_str not in self._watched_messages[channelID_str]:
             return
 
-        for assoc in self._watched_messages[channelID][msgid]:
+        for assoc in self._watched_messages[channelID_str][msgid_str]:
             if assoc['emojiName'] == payload.emoji.name and assoc['emojiID'] == payload.emoji.id:
                 role = discord.utils.get(guild.roles, id=assoc['roleID'])
                 await member.remove_roles(role)
