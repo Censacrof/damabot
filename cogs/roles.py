@@ -91,8 +91,11 @@ class Roles(commands.Cog):
             return
         
         self._watched_messages[channelID_str] = {}
-        use_embed = 'useEmbed' in channel_role_definitions and channel_role_definitions['useEmbed']
         for section in channel_role_definitions['sections']:
+            use_embed = True
+            if 'useEmbed' in section:
+                use_embed = section['useEmbed']
+            
             embed = discord.Embed(title=section['title'], description=section['description'], color=0x08457E)
             msg_content = '----------------------------------\n**{title}**\n{description}'.format_map(section)
 
