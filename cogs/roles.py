@@ -76,8 +76,10 @@ class Roles(commands.Cog):
             await ctx.send(err)
             return
         
-        # check that there are roles are defined for this channel che siano stati definiti dei ruoli per questo canale
+        # check if there are roles defined for this channel
         channelID = ctx.message.channel.id
+        channelID_str = str(channelID)
+
         channel_role_definitions = None
         for chnRls in role_definitions:
             if chnRls['channelID'] == channelID:
@@ -88,7 +90,7 @@ class Roles(commands.Cog):
             await ctx.send('There are no roles defined for this channel. (Channel ID: {})'.format(str(ctx.message.channel.id)))
             return
         
-        self._watched_messages[channelID] = {}
+        self._watched_messages[channelID_str] = {}
         use_embed = 'useEmbed' in channel_role_definitions and channel_role_definitions['useEmbed']
         for section in channel_role_definitions['sections']:
             embed = discord.Embed(title=section['title'], description=section['description'], color=0x08457E)
@@ -140,7 +142,10 @@ class Roles(commands.Cog):
                     'emojiID':  emoji.id,
                     'roleID':  role['roleID']
                 })
-            self._watched_messages[channelID][msg.id] = reaction_role_association
+
+            msgID = msg.id
+            msgID_str = str(msgID)
+            self._watched_messages[channelID_str][msgID_str] = reaction_role_association
 
         # serialize watchedMessages
         self.log.info('Serializing \'{}\''.format(self.WATCHED_MESSAGES_FILE))
@@ -164,16 +169,16 @@ class Roles(commands.Cog):
 
         channelID = payload.channel_id
         channelID_str = str(channelID)
-        msgid = payload.message_id
-        msgid_str = str(msgid)
+        msgID = payload.message_id
+        msgID_str = str(msgID)
         
         if channelID_str not in self._watched_messages:
             return
         
-        if msgid_str not in self._watched_messages[channelID_str]:
+        if msgID_str not in self._watched_messages[channelID_str]:
             return
         
-        for assoc in self._watched_messages[channelID_str][msgid_str]:
+        for assoc in self._watched_messages[channelID_str][msgID_str]:
             if assoc['emojiName'] == payload.emoji.name and assoc['emojiID'] == payload.emoji.id:
                 role = discord.utils.get(payload.member.guild.roles, id=assoc['roleID'])
                 await payload.member.add_roles(role)    
@@ -186,16 +191,16 @@ class Roles(commands.Cog):
 
         channelID = payload.channel_id
         channelID_str = str(channelID)
-        msgid = payload.message_id
-        msgid_str = str(msgid)
+        msgID = payload.message_id
+        msgID_str = str(msgID)
 
         if channelID_str not in self._watched_messages:
             return
         
-        if msgid_str not in self._watched_messages[channelID_str]:
+        if msgID_str not in self._watched_messages[channelID_str]:
             return
 
-        for assoc in self._watched_messages[channelID_str][msgid_str]:
+        for assoc in self._watched_messages[channelID_str][msgID_str]:
             if assoc['emojiName'] == payload.emoji.name and assoc['emojiID'] == payload.emoji.id:
                 role = discord.utils.get(guild.roles, id=assoc['roleID'])
                 await member.remove_roles(role)
