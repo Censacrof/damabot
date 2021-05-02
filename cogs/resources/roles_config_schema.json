@@ -24,6 +24,9 @@
 						"description": {
 							"type": "string" 
 						},
+						"useEmbed": {
+							"type": "boolean"
+						},
 						"roles": {
 							"type": "array",
 							"items": {

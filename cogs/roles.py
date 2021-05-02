@@ -64,11 +64,11 @@ class Roles(commands.Cog):
         await ctx.message.delete()
 
         # load the role definitions from the config
-        roleDefinitions = None
+        role_definitions = None
         try:
             with open(self.CONFIG_FILE, 'r') as roles_file:
-                roleDefinitions =  json.load(roles_file)
-                jsonschema.validate(roleDefinitions, self._config_schema)
+                role_definitions =  json.load(roles_file)
+                jsonschema.validate(role_definitions, self._config_schema)
 
         except Exception as e:
             err = 'Can\'t parse \'{}\': {}'.format(self.CONFIG_FILE, str(e))
@@ -78,32 +78,43 @@ class Roles(commands.Cog):
         
         # check that there are roles are defined for this channel che siano stati definiti dei ruoli per questo canale
         channelID = ctx.message.channel.id
-        channelRoleDefinitions = None
-        for chnRls in roleDefinitions:
+        channel_role_definitions = None
+        for chnRls in role_definitions:
             if chnRls['channelID'] == channelID:
-                channelRoleDefinitions = chnRls
+                channel_role_definitions = chnRls
                 break
         
-        if channelRoleDefinitions is None:
+        if channel_role_definitions is None:
             await ctx.send('There are no roles defined for this channel. (Channel ID: {})'.format(str(ctx.message.channel.id)))
             return
-
+        
         self._watched_messages[channelID] = {}
-        for section in channelRoleDefinitions['sections']:
+        use_embed = 'useEmbed' in channel_role_definitions and channel_role_definitions['useEmbed']
+        for section in channel_role_definitions['sections']:
             embed = discord.Embed(title=section['title'], description=section['description'], color=0x08457E)
-            
+            msg_content = '----------------------------------\n**{title}**\n{description}'.format_map(section)
+
             for role in section['roles']:
                 reg = r'[^\s]'
                 if 'title' in role and role['title'] is not None\
                 and re.search(reg, role['title']) is not None\
                 and 'description' in role and role['description'] is not None\
-                and re.search(reg, role['description']) is not None: 
+                and re.search(reg, role['description']) is not None:
+                    # embed version
                     title = role['emoji'] + ' ' + role['title']
                     desc = role['description']
                     embed.add_field(name=title, value=desc, inline=True)
-            msg = await ctx.send(embed=embed)
+
+                    # regular message version
+                    msg_content += '\n\n***{emoji} {title}:*** `{description}`'.format_map(role)
+            msg_content += '\n----------------------------------'
+
+            if use_embed:
+                msg = await ctx.send(embed=embed)
+            else:
+                msg = await ctx.send(content=msg_content)
             
-            reactionRoleAssociation = []
+            reaction_role_association = []
             for role in section['roles']:
                 emoji = None
                 if role['emoji'] in EMOJI.UNICODE_EMOJI:
@@ -124,21 +135,21 @@ class Roles(commands.Cog):
                     continue
 
                 await msg.add_reaction(emoji)
-                reactionRoleAssociation.append({ 
+                reaction_role_association.append({ 
                     'emojiName': emoji.name,
                     'emojiID':  emoji.id,
                     'roleID':  role['roleID']
                 })
-            self._watched_messages[channelID][msg.id] = reactionRoleAssociation
+            self._watched_messages[channelID][msg.id] = reaction_role_association
 
         # serialize watchedMessages
-        self.log.info('Serializing watchedMessage')
+        self.log.info('Serializing \'{}\''.format(self.WATCHED_MESSAGES_FILE))
         try:
             with open(self.WATCHED_MESSAGES_FILE, 'w') as f:
                 json.dump(self._watched_messages, f, ensure_ascii=False)
                 f.close()
         except Exception as e:
-            err = 'Can\'t serialize watchedMessages: {}'.format(str(e))
+            err = 'Can\'t serialize \'{}\': {}'.format(self.WATCHED_MESSAGES_FILE, str(e))
             self.log.error(err)
             await ctx.send(err)
             return
