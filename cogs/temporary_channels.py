@@ -105,7 +105,7 @@ class TemporaryChannels(commands.Cog):
                         category=after.channel.category,
                         
                         # if specified in the config set the user_limit parameter
-                        **({'user_limit': creator_channel_definition['userLimit']} if 'userLimit' in creator_channel_definition else {})
+                        **({'user_limit': creator_channel_definition['slots']} if 'slots' in creator_channel_definition else {})
                     )
                     room_number_manager.assign(new_channel.id)
 
